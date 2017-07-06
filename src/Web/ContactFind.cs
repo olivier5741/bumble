@@ -1,3 +1,4 @@
+using System;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 
@@ -7,7 +8,7 @@ namespace Bumble.Web
     [Route("/cms/contact/find","GET")]
     public class ContactFind : QueryDb<Contact>, ILeftJoin<Contact,ContactTag>
     {
-        public string TenantId { get; set; }
+        public Guid TenantId { get; set; }
         
         [Ignore]
         public string TenantKey { get; set; }
