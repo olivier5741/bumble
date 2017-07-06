@@ -48,6 +48,9 @@
       <HintPath>..\..\packages\ServiceStack.4.5.12\lib\net45\ServiceStack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ServiceStack.Admin, Version=4.5.12.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\ServiceStack.Admin.4.5.12\lib\net45\ServiceStack.Admin.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Api.Swagger, Version=4.5.12.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\ServiceStack.Api.Swagger.4.5.12\lib\net45\ServiceStack.Api.Swagger.dll</HintPath>
     </Reference>
@@ -114,7 +117,13 @@
   <ItemGroup>
     <Compile Include="AppHost.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="ContactBucket.cs" />
+    <Compile Include="ContactBucketAssignement.cs" />
+    <Compile Include="ContactBucketAssignementService.cs" />
+    <Compile Include="ContactBucketService.cs" />
+    <Compile Include="ContactFind.cs" />
     <Compile Include="ContactService.cs" />
+    <Compile Include="ContactTag.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
