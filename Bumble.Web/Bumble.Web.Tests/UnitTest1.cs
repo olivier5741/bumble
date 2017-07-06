@@ -2,8 +2,6 @@
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Testing;
-using Bumble.Web.ServiceModel;
-using Bumble.Web.ServiceInterface;
 
 namespace Bumble.Web.Tests
 {
@@ -14,7 +12,7 @@ namespace Bumble.Web.Tests
 
         public UnitTests()
         {
-            appHost = new BasicAppHost(typeof(MyServices).Assembly)
+            appHost = new BasicAppHost(typeof(ContactService).Assembly)
             {
                 ConfigureContainer = container =>
                 {
@@ -31,13 +29,13 @@ namespace Bumble.Web.Tests
         }
 
         [Test]
-        public void Test_Method1()
+        public void CreateContact()
         {
-            var service = appHost.Container.Resolve<MyServices>();
+            var service = appHost.Container.Resolve<ContactService>();
 
-            var response = (HelloResponse)service.Any(new Hello { Name = "World" });
+            var response = service.Post(new Contact { Name = "World" });
 
-            Assert.That(response.Result, Is.EqualTo("Hello, World!"));
+            Assert.That(response.Name, Is.EqualTo("World"));
         }
     }
 }

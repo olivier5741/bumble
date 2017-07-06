@@ -67,17 +67,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bumble.Web.ServiceInterface\Bumble.Web.ServiceInterface.csproj">
-      <Project>{801a0f89-d5f6-49a6-bcea-6624388c98a4}</Project>
-      <Name>Bumble.Web.ServiceInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bumble.Web.ServiceModel\Bumble.Web.ServiceModel.csproj">
-      <Project>{53E82AC1-DD1D-4C66-B55F-F9F4ACFB2F40}</Project>
-      <Name>Bumble.Web.ServiceModel</Name>
-    </ProjectReference>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Bumble.Web\Bumble.Web.csproj">
+      <Project>{4389B305-B381-4B50-B1A8-BBB5259A0524}</Project>
+      <Name>Bumble.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
