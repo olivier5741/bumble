@@ -1,4 +1,5 @@
-﻿using Funq;
+﻿using System;
+using Funq;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Api.Swagger;
@@ -24,11 +25,19 @@ namespace Bumble.Web
         /// </summary>
         public override void Configure(Container container)
         {
-            LogManager.LogFactory = new ConsoleLogFactory(debugEnabled:true); 
+            LogManager.LogFactory = new ConsoleLogFactory(); 
             
             JsConfig.DateHandler = DateHandler.ISO8601;
             JsConfig.EmitCamelCaseNames = true;
             JsConfig.ConvertObjectTypesIntoStringDictionary = true;
+
+            var euId = Guid.NewGuid();
+            
+            RegisterTypedRequestFilter<IBelonger>((req, res, dtoInterface) =>
+            {
+                if (dtoInterface.TenantKey != null && dtoInterface.TenantKey.ToLower() == "eu")
+                    dtoInterface.TenantId = euId;
+            });
             
             OrmLiteConfig.SqlExpressionSelectFilter = q =>
             {
