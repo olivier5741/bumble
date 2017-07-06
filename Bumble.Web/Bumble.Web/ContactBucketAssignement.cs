@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 
@@ -17,7 +18,15 @@ namespace Bumble.Web
         [ForeignKey(typeof(Contact), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public Guid ContactId { get; set; }
         
+        [Reference]
+        [IgnoreDataMember]
+        public Contact Contact { get; set; }
+        
         [ForeignKey(typeof(ContactBucket), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public Guid ContactBucketId { get; set; }
+        
+        [Reference]
+        [IgnoreDataMember]
+        public ContactBucket ContactBucket { get; set; }
     }
 }

@@ -10,6 +10,9 @@ namespace Bumble.Web
         {
             request.Id = Guid.NewGuid();
             Db.Save(request, true);
+            
+            PublishMessage(new ContactCreated().PopulateWith(request));
+            
             return Db.LoadSingleById<Contact>(request.Id);
         }
 
@@ -27,6 +30,8 @@ namespace Bumble.Web
             Db.Update(request);
             ResetContactTags(request);
             
+            PublishMessage(new ContactUpdated().PopulateWith(request));
+            
             return Db.LoadSingleById<Contact>(request.Id);
         }
 
@@ -34,14 +39,18 @@ namespace Bumble.Web
         {
             // TODO reentrant but not transactional
             
-            Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
-
-            Db.UpdateNonDefaults(request, c => c.Id == request.Id);
+           Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
+            
+           Db.UpdateNonDefaults(request, c => c.Id == request.Id);// TODO : might be better contact.PopulateWithNonDefaultValues(viewModel);
 
             if (request.Tags != null)
                 ResetContactTags(request);
 
-            return Db.LoadSingleById<Contact>(request.Id);
+            var contact = Db.LoadSingleById<Contact>(request.Id);
+            
+            PublishMessage(new ContactUpdated().PopulateWith(contact));
+
+            return contact;
         }
 
         private void ResetContactTags(Contact request)
@@ -56,6 +65,7 @@ namespace Bumble.Web
             var contact = Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
             contact.IsDeleted = true;
             Db.Update(contact); // TODO this might be to simple
+            PublishMessage(new ContactDeleted().PopulateWith(contact));
             return null;
         }
     }
