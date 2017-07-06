@@ -8,12 +8,6 @@ namespace Bumble.Web
 {
     public class ContactBucketAssignementService : Service
     {
-        public ContactBucketAssignement[] Post(ContactBucketAssignement[] request)
-        {
-            request.ToList().ForEach(r => r.Id = Guid.NewGuid());
-            Db.SaveAll(request);
-            return request;
-        }
         
         public ContactBucketAssignement Post(ContactBucketAssignement request)
         {
@@ -24,17 +18,12 @@ namespace Bumble.Web
         
         public ContactBucketAssignement Get(ContactBucketAssignement request)
         {
-            return Db.SingleById<ContactBucketAssignement>(request.Id);
-        }
-        
-        public object Delete(ContactBucketAssignement[] request)
-        {
-            Db.DeleteByIds<Contact>(request.Select(r => r.Id));
-            return null;
+            return Db.SingleById<ContactBucketAssignement>(request.Id).CheckIfBelongs(request);
         }
         
         public object Delete(ContactBucketAssignement request)
         {
+            Db.SingleById<ContactBucketAssignement>(request.Id).CheckIfBelongs(request);
             Db.DeleteById<Contact>(request.Id);
             return null;
         }

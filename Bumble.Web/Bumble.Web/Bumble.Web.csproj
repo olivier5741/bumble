@@ -116,6 +116,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppHost.cs" />
+    <Compile Include="BumbleAuthorizationExts.cs" />
+    <Compile Include="BumbleSession.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactBucket.cs" />
     <Compile Include="ContactBucketAssignement.cs" />
@@ -127,6 +129,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="IBelonger.cs" />
+    <Compile Include="ISoftDelete.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup>

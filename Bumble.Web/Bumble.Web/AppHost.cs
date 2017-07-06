@@ -30,6 +30,12 @@ namespace Bumble.Web
             JsConfig.EmitCamelCaseNames = true;
             JsConfig.ConvertObjectTypesIntoStringDictionary = true;
             
+            OrmLiteConfig.SqlExpressionSelectFilter = q =>
+            {
+                if (q.ModelDef.ModelType.HasInterface(typeof(ISoftDelete)))
+                    q.Where<ISoftDelete>(x => x.IsDeleted != true);
+            };
+            
             container.Register<IDbConnectionFactory>(c => 
                 new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
 

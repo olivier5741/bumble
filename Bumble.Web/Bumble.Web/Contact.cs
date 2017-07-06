@@ -7,9 +7,10 @@ using ServiceStack.DataAnnotations;
 namespace Bumble.Web
 {
     [Route("/cms/contact", "POST,GET,PUT,PATCH,DELETE")]
-    public class Contact
+    public class Contact : IBelonger, ISoftDelete
     {
         public Guid Id { get; set; }
+        public Guid? TenantId { get; set; } // TODO enforce not empty in database
         public string Name { get; set; }
 
         [Reference]
