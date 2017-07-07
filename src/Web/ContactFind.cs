@@ -4,6 +4,8 @@ using ServiceStack.DataAnnotations;
 
 namespace Bumble.Web
 {
+    // Bug load select not working for sqlite 
+    
     [Route("/{TenantKey}/cms/contact/find","GET")]
     [Route("/cms/contact/find","GET")]
     public class ContactFind : QueryDb<Contact>, ILeftJoin<Contact,ContactTag>

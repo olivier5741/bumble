@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -26,7 +27,32 @@ namespace Bumble.Web
 
         public Contact Get(Contact request)
         {
-            return Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
+            var query = Db.From<Contact>();
+
+            if (request.Id.HasValue)
+                query.Or(c => c.Id == request.Id);
+            else
+            {
+                if (request.UniqueIdentifier != null)
+                {
+                    query.Or(c => c.PhoneNumber == request.UniqueIdentifier && c.TenantId == request.TenantId);
+                    query.Or(c => c.MobilePhoneNumber == request.UniqueIdentifier && c.TenantId == request.TenantId);
+                    query.Or(c => c.Email == request.UniqueIdentifier && c.TenantId == request.TenantId);
+                }
+                
+                if (request.PhoneNumber != null)
+                    query.Or(c => c.PhoneNumber == request.PhoneNumber && c.TenantId == request.TenantId);
+            
+                if (request.MobilePhoneNumber != null)
+                    query.Or(c => c.MobilePhoneNumber == request.MobilePhoneNumber  && c.TenantId == request.TenantId);
+                
+                if (request.Email != null)
+                    query.Or(c => c.Email == request.Email  && c.TenantId == request.TenantId);
+            }
+            
+            var contact = Db.Single(query).CheckIfBelongs(request); // Load select not working on sqlite
+            Db.LoadReferences(contact);
+            return contact;
         }
 
         public Contact Put(Contact request)
@@ -48,14 +74,17 @@ namespace Bumble.Web
         {
             // TODO reentrant but not transactional
             
-           Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
+            var contact = Get(request).CheckIfBelongs(request);
             
-           Db.UpdateNonDefaults(request, c => c.Id == request.Id);// TODO : might be better contact.PopulateWithNonDefaultValues(viewModel);
+            if(contact == null)
+                throw new ArgumentNullException();
+
+            contact.PopulateWithNonDefaultValues(request);
+            
+            Db.Update(contact);
 
             if (request.Tags != null)
                 ResetContactTags(request);
-
-            var contact = Db.LoadSingleById<Contact>(request.Id);
             
             var @event = new ContactUpdated().PopulateWith(contact);
             _bus.Publish(@event,$"tenant_id.{@event.TenantId}");
@@ -66,13 +95,17 @@ namespace Bumble.Web
         private void ResetContactTags(Contact request)
         {
             Db.Delete<ContactTag>(t => t.ContactId == request.Id);
-            request.Tags?.ForEach(t => t.ContactId = request.Id);
+            request.Tags?.ForEach(t => t.ContactId = request.Id.Value);
             Db.SaveAll(request.Tags);
         }
 
         public object Delete(Contact request)
         {
-            var contact = Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
+            var contact = Get(request).CheckIfBelongs(request);
+            
+            if(contact == null)
+                throw new ArgumentNullException();
+            
             contact.IsDeleted = true;
             Db.Update(contact); // TODO this might be to simple
             var @event = new ContactDeleted().PopulateWith(contact);
