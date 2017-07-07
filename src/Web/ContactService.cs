@@ -17,6 +17,7 @@ namespace Bumble.Web
         public Contact Post(Contact request)
         {
             request.Id = Guid.NewGuid();
+            request.Tags = request.Labels.Select(l => new ContactTag {Value = l}).ToList();
             Db.Save(request, true);
 
             var @event = new ContactCreated().PopulateWith(request);
@@ -52,6 +53,7 @@ namespace Bumble.Web
             
             var contact = Db.Single(query).CheckIfBelongs(request); // Load select not working on sqlite
             Db.LoadReferences(contact);
+            contact.Labels = contact.Tags.Select(t => t.Value).ToList();
             return contact;
         }
 
@@ -60,6 +62,8 @@ namespace Bumble.Web
             // TODO reentrant but not transactional
 
             Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
+
+            request.Tags = request.Labels.Select(l => new ContactTag {Value = l}).ToList();
             
             Db.Update(request);
             ResetContactTags(request);
@@ -83,8 +87,11 @@ namespace Bumble.Web
             
             Db.Update(contact);
 
-            if (request.Tags != null)
+            if (request.Labels != null)
+            {
+                request.Tags = request.Labels.Select(l => new ContactTag {Value = l}).ToList();
                 ResetContactTags(request);
+            }
             
             var @event = new ContactUpdated().PopulateWith(contact);
             _bus.Publish(@event,$"tenant_id.{@event.TenantId}");

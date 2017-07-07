@@ -35,7 +35,10 @@ namespace Bumble.Web
         public string MobilePhoneNumber { get; set; }
         
         public string Email { get; set; }
+        
+        public List<string> Labels { get; set; }
 
+        [IgnoreDataMember]
         [Reference]
         public List<ContactTag> Tags { get; set; }
 

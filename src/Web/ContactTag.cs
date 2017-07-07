@@ -6,10 +6,9 @@ namespace Bumble.Web
 {
     public class ContactTag
     {
-        [IgnoreDataMember]
+        [AutoIncrement]
         public long Id { get; set; }
         
-        [IgnoreDataMember]
         [ForeignKey(typeof(Contact), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public Guid ContactId { get; set; }
         

@@ -41,8 +41,9 @@ namespace Bumble.Web
             
             OrmLiteConfig.SqlExpressionSelectFilter = q =>
             {
-                if (q.ModelDef.ModelType.HasInterface(typeof(ISoftDelete)))
-                    q.Where<ISoftDelete>(x => x.IsDeleted != true);
+// BUG this breaks autoquery
+//                if (q.ModelDef.ModelType.HasInterface(typeof(ISoftDelete)))
+//                    q.Where<ISoftDelete>(x => x.IsDeleted != true);
             };
             
             container.Register<IDbConnectionFactory>(c => 
