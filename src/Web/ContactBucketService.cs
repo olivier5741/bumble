@@ -9,26 +9,36 @@ namespace Bumble.Web
         public ContactBucket Post(ContactBucket request)
         {
             request.Id = Guid.NewGuid();
+
+            if (request.Key == null)
+                request.Key = request.Name.ToLower().ToLowercaseUnderscore().Replace(" ", "").Replace("_","-");
+            
             Db.Save(request);
             return request;
         }
         
         public ContactBucket Get(ContactBucket request)
         {
-            return Db.SingleById<ContactBucket>(request.Id).CheckIfBelongs(request);
+            return Db.Single<ContactBucket>(c => c.Id == request.Id || c.Key == request.Key).CheckIfBelongs(request);
         }
         
         public ContactBucket Put(ContactBucket request)
         {
-            Db.SingleById<ContactBucket>(request.Id).CheckIfBelongs(request);
-            Db.Save(request);
+            var bucket = Db.Single<ContactBucket>(c => c.Id == request.Id || c.Key == request.Key).CheckIfBelongs(request);
+            
+            request.Id = bucket.Id;
+            request.Key = bucket.Key;
+            
+            Db.Save(bucket.PopulateWith(request));
             return Db.SingleById<ContactBucket>(request.Id);
         }
         
         public object Delete(ContactBucket request)
         {
-            Db.SingleById<ContactBucket>(request.Id).CheckIfBelongs(request);
-            Db.DeleteById<ContactBucket>(request.Id);
+            var bucket = Db.Single<ContactBucket>(c => c.Id == request.Id || c.Key == request.Key).CheckIfBelongs(request);
+            
+            Db.DeleteById<ContactBucket>(bucket.Id);
+            
             return null;
         }
     }

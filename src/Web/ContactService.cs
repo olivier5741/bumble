@@ -6,12 +6,20 @@ namespace Bumble.Web
 {
     public class ContactService : Service
     {
+        private readonly IMessagePublisher _bus;
+
+        public ContactService(IMessagePublisher bus)
+        {
+            _bus = bus;
+        }
+        
         public Contact Post(Contact request)
         {
             request.Id = Guid.NewGuid();
             Db.Save(request, true);
-            
-            PublishMessage(new ContactCreated().PopulateWith(request));
+
+            var @event = new ContactCreated().PopulateWith(request);
+            _bus.Publish(@event,$"tenant_id.{@event.TenantId}");
             
             return Db.LoadSingleById<Contact>(request.Id);
         }
@@ -30,7 +38,8 @@ namespace Bumble.Web
             Db.Update(request);
             ResetContactTags(request);
             
-            PublishMessage(new ContactUpdated().PopulateWith(request));
+            var @event = new ContactUpdated().PopulateWith(request);
+            _bus.Publish(@event,$"tenant_id.{@event.TenantId}");
             
             return Db.LoadSingleById<Contact>(request.Id);
         }
@@ -48,7 +57,8 @@ namespace Bumble.Web
 
             var contact = Db.LoadSingleById<Contact>(request.Id);
             
-            PublishMessage(new ContactUpdated().PopulateWith(contact));
+            var @event = new ContactUpdated().PopulateWith(contact);
+            _bus.Publish(@event,$"tenant_id.{@event.TenantId}");
 
             return contact;
         }
@@ -65,7 +75,8 @@ namespace Bumble.Web
             var contact = Db.LoadSingleById<Contact>(request.Id).CheckIfBelongs(request);
             contact.IsDeleted = true;
             Db.Update(contact); // TODO this might be to simple
-            PublishMessage(new ContactDeleted().PopulateWith(contact));
+            var @event = new ContactDeleted().PopulateWith(contact);
+            _bus.Publish(@event,$"tenant_id.{@event.TenantId}");
             return null;
         }
     }

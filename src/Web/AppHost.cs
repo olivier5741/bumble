@@ -48,6 +48,8 @@ namespace Bumble.Web
             container.Register<IDbConnectionFactory>(c => 
                 new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
 
+            container.Register<IMessagePublisher>(c => new DummyBus());
+
             using (var sess = container.Resolve<IDbConnectionFactory>().Open())
             {
                 sess.CreateTable<Contact>();

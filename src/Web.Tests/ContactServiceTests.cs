@@ -10,6 +10,8 @@ using ServiceStack.Text;
 
 namespace Bumble.Web.Tests
 {
+    
+    
     [TestFixture]
     public class ContactServiceTests
     {
@@ -35,7 +37,8 @@ namespace Bumble.Web.Tests
                     container.Register<IDbConnectionFactory>(c =>
                         new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
 
-                    container.Register<IMessageService>(new InMemoryTransientMessageService());
+                    container.Register<IMessagePublisher>(c => new DummyBus());
+                    //container.Register<IMessageService>(new InMemoryTransientMessageService());
 
                     using (var sess = container.Resolve<IDbConnectionFactory>().Open())
                     {

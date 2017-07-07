@@ -25,6 +25,9 @@ namespace Bumble.Web
         [ForeignKey(typeof(ContactBucket), OnDelete = "CASCADE", OnUpdate = "CASCADE")]
         public Guid ContactBucketId { get; set; }
         
+        [Ignore]
+        public string ContactBucketKey { get; set; }
+        
         [Reference]
         [IgnoreDataMember]
         public ContactBucket ContactBucket { get; set; }
