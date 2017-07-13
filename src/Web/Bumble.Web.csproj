@@ -44,6 +44,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.4.5.12\lib\net45\ServiceStack.dll</HintPath>
       <Private>True</Private>
@@ -69,6 +72,9 @@
     <Reference Include="ServiceStack.OrmLite, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.OrmLite.4.5.12\lib\net45\ServiceStack.OrmLite.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.MySql, Version=4.5.12.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\ServiceStack.OrmLite.MySql.4.5.12\lib\net45\ServiceStack.OrmLite.MySql.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.OrmLite.Sqlite.Windows, Version=4.5.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.OrmLite.Sqlite.Windows.4.5.8\lib\net45\ServiceStack.OrmLite.Sqlite.Windows.dll</HintPath>
@@ -102,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -112,9 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

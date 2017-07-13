@@ -3,6 +3,7 @@ using Funq;
 using ServiceStack;
 using ServiceStack.Admin;
 using ServiceStack.Api.Swagger;
+using ServiceStack.Configuration;
 using ServiceStack.Data;
 using ServiceStack.Logging;
 using ServiceStack.OrmLite;
@@ -46,8 +47,12 @@ namespace Bumble.Web
 //                    q.Where<ISoftDelete>(x => x.IsDeleted != true);
             };
             
+            // app settings through ormlite
+
+            var connStr = new EnvironmentVariableSettings().GetString("MYSQL_CONNECTION_STRING"); 
+            
             container.Register<IDbConnectionFactory>(c => 
-                new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
+                new OrmLiteConnectionFactory(connStr, MySqlDialect.Provider));
 
             container.Register<IMessagePublisher>(c => new DummyBus());
 
