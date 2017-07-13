@@ -49,7 +49,11 @@ namespace Bumble.Web
             
             // app settings through ormlite
 
-            var connStr = new EnvironmentVariableSettings().GetString("MYSQL_CONNECTION_STRING"); 
+            var appSettings = new MultiAppSettings(
+                new EnvironmentVariableSettings(),
+                new AppSettings());
+            
+            var connStr = appSettings.GetString("MYSQL_CONNECTION_STRING"); 
             
             container.Register<IDbConnectionFactory>(c => 
                 new OrmLiteConnectionFactory(connStr, MySqlDialect.Provider));
