@@ -60,13 +60,6 @@ namespace Bumble.Web
 
             container.Register<IMessagePublisher>(c => new DummyBus());
 
-            using (var sess = container.Resolve<IDbConnectionFactory>().Open())
-            {
-                sess.CreateTable<Contact>();
-                sess.CreateTable<ContactTag>();
-                sess.CreateTable<ContactBucket>();
-                sess.CreateTable<ContactBucketAssignement>();
-            }
             
             Plugins.Add(new SwaggerFeature());
 //            Plugins.Add(new AutoQueryFeature());
