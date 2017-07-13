@@ -17,7 +17,7 @@ namespace Bumble.Web
         public Contact Post(Contact request)
         {
             request.Id = Guid.NewGuid();
-            request.Tags = request.Labels.Select(l => new ContactTag {Value = l}).ToList();
+            request.Tags = request.Labels?.Select(l => new ContactTag {Value = l}).ToList();
             Db.Save(request, true);
 
             var @event = new ContactCreated().PopulateWith(request);

@@ -40,12 +40,12 @@ namespace Bumble.Web
                     dtoInterface.TenantId = euId;
             });
             
-            OrmLiteConfig.SqlExpressionSelectFilter = q =>
-            {
+//            OrmLiteConfig.SqlExpressionSelectFilter = q =>
+//            {
 // BUG this breaks autoquery
 //                if (q.ModelDef.ModelType.HasInterface(typeof(ISoftDelete)))
 //                    q.Where<ISoftDelete>(x => x.IsDeleted != true);
-            };
+//            };
             
             // app settings through ormlite
 
@@ -60,17 +60,17 @@ namespace Bumble.Web
 
             container.Register<IMessagePublisher>(c => new DummyBus());
 
-            using (var sess = container.Resolve<IDbConnectionFactory>().Open())
-            {
-                sess.CreateTable<Contact>();
-                sess.CreateTable<ContactTag>();
-                sess.CreateTable<ContactBucket>();
-                sess.CreateTable<ContactBucketAssignement>();
-            }
+//            using (var sess = container.Resolve<IDbConnectionFactory>().Open())
+//            {
+//                sess.CreateTable<Contact>();
+//                sess.CreateTable<ContactTag>();
+//                sess.CreateTable<ContactBucket>();
+//                sess.CreateTable<ContactBucketAssignement>();
+//            }
             
             Plugins.Add(new SwaggerFeature());
-            Plugins.Add(new AutoQueryFeature());
-            Plugins.Add(new AdminFeature());
+//            Plugins.Add(new AutoQueryFeature());
+//            Plugins.Add(new AdminFeature());
             //Config examples
             //this.Plugins.Add(new PostmanFeature());
             //this.Plugins.Add(new CorsFeature());
